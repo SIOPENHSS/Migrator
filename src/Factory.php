@@ -3,6 +3,7 @@
 namespace SIOPEN\Migrator;
 
 use Closure;
+use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
 class Factory
@@ -18,9 +19,14 @@ class Factory
     protected array $uniques = [];
 
     /**
+     * @var Command|null
+     */
+    protected Command|null $console = null;
+
+    /**
      * @var Closure|null
      */
-    protected Closure|null $callback;
+    protected Closure|null $callback = null;
 
     /**
      * @param  string $connection
@@ -29,6 +35,17 @@ class Factory
     public function __construct(protected string $connection = 'siopen', protected array $fields = [])
     {
         //
+    }
+
+    /**
+     * @param  Command $console
+     * @return $this
+     */
+    public function console(Command $console) : static
+    {
+        $this->console = $console;
+
+        return $this;
     }
 
     /**
@@ -64,11 +81,25 @@ class Factory
             $this->origin = $origin;
         }
 
+        $start = microtime(true);
+
+        /**
+         * @var Collection $collections
+         */
         $collections = $this->origin::on($this->connection)->get();
 
-        $collections->each(function ($result) use ($class) {
+        $callback = function ($result) use ($class) {
             $this->create($result, $class);
-        });
+        };
+
+        if ($this->console) {
+            $this->console->newLine();
+            $this->console->info('MIGRATING : ' . $this->origin . ' => ' . $class,);
+            $this->console->withProgressBar($collections, $callback);
+            $this->console->newLine();
+        } else {
+            $collections->each($callback);
+        }
     }
 
     /**
