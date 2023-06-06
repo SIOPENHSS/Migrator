@@ -1,0 +1,6 @@
+# IDEA
+.idea
+
+# PROJECT
+/vendor
+composer.lock
