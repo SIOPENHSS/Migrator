@@ -5,10 +5,14 @@ namespace SIOPEN\Migrator\Models;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laratrust\Traits\HasRolesAndPermissions;
 
+/**
+ * @property mixed $detail
+ */
 class User extends Authenticatable
 {
-    use  SoftDeletes;
+    use  SoftDeletes, HasRolesAndPermissions;
 
     /**
      * @var string[]

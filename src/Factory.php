@@ -4,6 +4,7 @@ namespace SIOPEN\Migrator;
 
 use Closure;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class Factory
@@ -29,12 +30,19 @@ class Factory
     protected Closure|null $callback = null;
 
     /**
-     * @param  string $connection
      * @param  array  $fields
+     * @param  string $connection
      */
-    public function __construct(protected string $connection = 'siopen', protected array $fields = [])
+    public function __construct(protected array $fields, protected string $connection = 'siopen')
     {
-        //
+        $this->fields = array_merge(
+            [
+                'created_at' => 'created_at',
+                'updated_at' => 'updated_at',
+                'deleted_at' => 'deleted_at',
+            ],
+            $this->fields,
+        );
     }
 
     /**
@@ -75,18 +83,22 @@ class Factory
      * @param  string|null $origin
      * @return void
      */
-    public function migrate(string $class, string $origin = null) : void
+    public function migrate(string $class, mixed $origin = null) : void
     {
         if ($origin) {
-            $this->origin = $origin;
+            $this->origin = is_array($origin) ? array_keys($origin)[0] : $origin;
         }
-
-        $start = microtime(true);
 
         /**
          * @var Collection $collections
          */
-        $collections = $this->origin::on($this->connection)->get();
+        $query = $this->origin::on($this->connection);
+
+        if (is_array($origin)) {
+            $query = $origin[$this->origin]($query);
+        }
+
+        $collections = $query->withTrashed()->get();
 
         $callback = function ($result) use ($class) {
             $this->create($result, $class);
@@ -103,23 +115,28 @@ class Factory
     }
 
     /**
-     * @param  mixed  $origin
-     * @param  string $class
+     * @param  mixed $origin
+     * @param  mixed $class
      * @return void
+     * @noinspection PhpPossiblePolymorphicInvocationInspection
      */
-    protected function create(mixed $origin, string $class) : void
+    public function create(mixed $origin, mixed $class) : void
     {
+        /**
+         * @var Model $class
+         */
+
         $data = $this->populate($origin);
 
         if (empty($this->uniques)) {
-            $result = $class::create($data->toArray());
+            $result = is_string($class) ? $class::create($data->toArray()) : $class->create($data->toArray());
         } else {
             $uniques = [];
             foreach ($this->uniques as $key) {
                 $uniques[$key] = $data->get($key);
             }
 
-            $result = $class::updateOrCreate($uniques, $data->toArray());
+            $result = is_string($class) ? $class::updateOrCreate($uniques, $data->toArray()) : $class->updateOrCreate($uniques, $data->toArray());
         }
 
         if ($this->callback) {
@@ -128,17 +145,25 @@ class Factory
     }
 
     /**
-     * @param  mixed $model
+     * @param  mixed $origin
      * @return Collection
      */
-    protected function populate(mixed $model) : Collection
+    public function populate(mixed $origin) : Collection
     {
+        if (is_null($origin)) {
+            return collect([
+                //
+            ]);
+        }
+
         $data = [];
         foreach ($this->fields as $key => $original) {
-            if (is_string($original)) {
-                $data[$key] = $model->getOriginal($original);
-            } else if (is_callable($original)) {
-                $data[$key] = $original($model);
+            if (is_string($key) && is_string($original)) {
+                $data[$key] = $origin->getOriginal($original);
+            } else if (is_string($key) && is_callable($original)) {
+                $data[$key] = $original($origin);
+            } else {
+                $data[$original] = $origin->getOriginal($original);
             }
         }
 
