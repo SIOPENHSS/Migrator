@@ -35,6 +35,11 @@ class MerchantStatus extends Model
     public const VERIFIED = 'TELAH DIVERIFIKASI';
 
     /**
+     * @var string
+     */
+    protected $connection = 'siopen';
+
+    /**
      * @var string[]
      */
     protected $fillable = [
@@ -99,9 +104,9 @@ class MerchantStatus extends Model
     public function set(string $status, string $reason = null) : MerchantStatus
     {
         return match ($status) {
-            MerchantStatus::VERIFIED => $this->accepted(),
+            MerchantStatus::VERIFIED   => $this->accepted(),
             MerchantStatus::PROCESSING => $this->processed(),
-            MerchantStatus::REJECTED => $this->rejected($reason),
+            MerchantStatus::REJECTED   => $this->rejected($reason),
         };
     }
 

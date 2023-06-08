@@ -28,6 +28,11 @@ class Category extends Model
     public const CATERING = 'Katering';
 
     /**
+     * @var string
+     */
+    protected $connection = 'siopen';
+
+    /**
      * @var string[]
      */
     protected $fillable = [

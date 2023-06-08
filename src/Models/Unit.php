@@ -4,7 +4,6 @@ namespace SIOPEN\Migrator\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static create($data)
@@ -12,12 +11,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Unit extends Model
 {
-    use SoftDeletes;
-
     /**
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @var string
+     */
+    protected $connection = 'siopen';
 
     /**
      * @var string[]

@@ -3,26 +3,25 @@
 namespace SIOPEN\Migrator\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * @method static create(array $array)
- * @method updateOrCreate(array $unique, array $data)
- * @mixin IdeHelperFile
- */
 class File extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
+
+    /**
+     * @var string
+     */
+    protected $connection = 'siopen';
 
     /**
      * @var string[]
      */
     protected $fillable = [
-        'type', 'disk', 'parent_id', 'parent_model', 'file_name', 'real_name', 'deleted_at'
+        'type', 'disk', 'parent_id', 'parent_model', 'file_name', 'real_name', 'deleted_at',
     ];
 
     /**
@@ -63,7 +62,7 @@ class File extends Model
     public function parent() : BelongsTo
     {
         $selected = match ($this->parent_model) {
-            Product::class => [
+            Product::class  => [
                 'id', 'merchant_id', 'title',
             ],
             Merchant::class => [

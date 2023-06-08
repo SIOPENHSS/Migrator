@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class AgencyUserRole extends Model
 {
     /**
+     * @var string
+     */
+    protected $connection = 'siopen';
+
+    /**
      * @var string[]
      */
     protected $fillable = [

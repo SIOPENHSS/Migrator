@@ -26,6 +26,11 @@ class Agency extends Model
     const TYPE_HOSPITAL = 'hospital';
 
     /**
+     * @var string
+     */
+    protected $connection = 'siopen';
+
+    /**
      * @var string[]
      */
     protected $fillable = [

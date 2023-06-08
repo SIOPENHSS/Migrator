@@ -14,8 +14,10 @@ class MigratorServiceProvider extends ServiceProvider
     public function register() : void
     {
         config([
-            'laratrust.user_models'  => User::class,
-            'laratrust.models.roles' => Role::class,
+            'laratrust.user_models'      => User::class,
+            'laratrust.models.role'      => Role::class,
+            'laratrust.models.roles'     => Role::class,
+            'laratrust.tables.role_user' => 'user_roles',
         ]);
     }
 }

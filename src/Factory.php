@@ -5,6 +5,7 @@ namespace SIOPEN\Migrator;
 use Closure;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
 class Factory
@@ -98,7 +99,11 @@ class Factory
             $query = $origin[$this->origin]($query);
         }
 
-        $collections = $query->withTrashed()->get();
+        if (in_array(SoftDeletes::class, class_uses_recursive($this->origin))) {
+            $query = $query->withTrashed();
+        }
+
+        $collections = $query->get();
 
         $callback = function ($result) use ($class) {
             $this->create($result, $class);
@@ -136,7 +141,7 @@ class Factory
                 $uniques[$key] = $data->get($key);
             }
 
-            $result = is_string($class) ? $class::updateOrCreate($uniques, $data->toArray()) : $class->updateOrCreate($uniques, $data->toArray());
+            $result = is_string($class) ? $class::firstOrCreate($uniques, $data->toArray()) : $class->firstOrCreate($uniques, $data->toArray());
         }
 
         if ($this->callback) {

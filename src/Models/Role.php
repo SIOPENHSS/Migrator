@@ -61,6 +61,11 @@ class Role extends \Laratrust\Models\Role
     public const MERCHANT_STAFF = 'merchant-staff';
 
     /**
+     * @var string
+     */
+    protected $connection = 'siopen';
+
+    /**
      * @var array
      */
     public $guarded = [];

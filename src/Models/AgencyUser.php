@@ -2,7 +2,6 @@
 
 namespace SIOPEN\Migrator\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class AgencyUser extends Model
 {
     use  SoftDeletes;
+
+    /**
+     * @var string
+     */
+    protected $connection = 'siopen';
 
     /**
      * @var string[]

@@ -16,6 +16,8 @@ class Merchant extends Model
 {
     use SoftDeletes, FileRelation;
 
+    protected $connection = 'siopen';
+
     /**
      * @var string
      */
@@ -112,7 +114,6 @@ class Merchant extends Model
     {
         return $this
             ->hasOneThrough(User::class, MerchantUser::class, 'merchant_id', 'id', 'id', 'user_id')
-            ->withTrashedParents()
             ->whereHas('roles', function ($query) {
                 return $query->where('name', Role::MERCHANT_OWNER);
             });

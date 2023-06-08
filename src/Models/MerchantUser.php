@@ -3,14 +3,12 @@
 namespace SIOPEN\Migrator\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * @method static create(array $array)
- * @method static updateOrCreate(array $array, array $array1)
- * @mixin IdeHelperMerchantUser
- */
 class MerchantUser extends Model
 {
+    use SoftDeletes;
+
     /**
      * @var string[]
      */

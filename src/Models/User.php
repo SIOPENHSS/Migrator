@@ -15,6 +15,11 @@ class User extends Authenticatable
     use  SoftDeletes, HasRolesAndPermissions;
 
     /**
+     * @var string
+     */
+    protected $connection = 'siopen';
+
+    /**
      * @var string[]
      */
     protected $fillable = [
