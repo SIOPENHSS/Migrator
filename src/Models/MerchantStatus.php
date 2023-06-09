@@ -2,16 +2,10 @@
 
 namespace SIOPEN\Migrator\Models;
 
-use App\Repository\Merchant\MerchantStatusRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use JetBrains\PhpStorm\Pure;
 
-/**
- * @method static create(array $array)
- * @method static updateOrCreate(array $unique, array $data)
- * @mixin IdeHelperMerchantStatus
- */
 class MerchantStatus extends Model
 {
     /**

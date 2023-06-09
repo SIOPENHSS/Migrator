@@ -141,7 +141,7 @@ class Factory
                 $uniques[$key] = $data->get($key);
             }
 
-            $result = is_string($class) ? $class::firstOrCreate($uniques, $data->toArray()) : $class->firstOrCreate($uniques, $data->toArray());
+            $result = is_string($class) ? $class::withTrashed()->firstOrCreate($uniques, $data->toArray()) : $class->firstOrCreate($uniques, $data->toArray());
         }
 
         if ($this->callback) {
