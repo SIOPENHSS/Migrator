@@ -128,6 +128,7 @@ class Order extends Model
     {
         return $this
             ->hasOneThrough(User::class, AgencyUser::class, 'id', 'id', 'costumer_id', 'user_id')
+            ->withTrashedParents()
             ->latest('id');
     }
 

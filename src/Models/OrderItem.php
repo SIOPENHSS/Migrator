@@ -33,7 +33,7 @@ class OrderItem extends Model
      */
     public function bargain() : HasOne
     {
-        return $this->hasOne(OrderPriceBargain::class, 'order_item_id')->whereNull('deleted_at');
+        return $this->hasOne(OrderPriceBargain::class, 'order_item_id')->withTrashed()->whereNull('deleted_at');
     }
 
     /**
@@ -41,7 +41,7 @@ class OrderItem extends Model
      */
     public function price() : BelongsTo
     {
-        return $this->belongsTo(ProductPrice::class, 'price_id');
+        return $this->belongsTo(ProductPrice::class, 'price_id')->withTrashed();
     }
 
     /**
@@ -49,7 +49,7 @@ class OrderItem extends Model
      */
     public function taxCategory() : BelongsTo
     {
-        return $this->belongsTo(TaxCategory::class, 'tax_category_id');
+        return $this->belongsTo(TaxCategory::class, 'tax_category_id')->withTrashed();
     }
 
     /**

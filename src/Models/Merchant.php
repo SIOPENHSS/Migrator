@@ -69,6 +69,11 @@ class Merchant extends Model
         return $this->file()->where('type', 'KTP');
     }
 
+    public function nib() : HasOne
+    {
+        return $this->file()->where('type', 'NIB');
+    }
+
     /**
      * @return HasMany
      */

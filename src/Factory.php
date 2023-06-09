@@ -103,20 +103,18 @@ class Factory
             $query = $query->withTrashed();
         }
 
-        $collections = $query->get();
-
         $callback = function ($result) use ($class) {
             $this->create($result, $class);
         };
 
-        if ($this->console) {
+        $this->console->newLine();
+        $this->console->info('MIGRATING : ' . $this->origin . ' => ' . $class);
+        $query->chunk(100, function ($items) use ($callback) {
+            $this->console->withProgressBar($items, $callback);
             $this->console->newLine();
-            $this->console->info('MIGRATING : ' . $this->origin . ' => ' . $class,);
-            $this->console->withProgressBar($collections, $callback);
-            $this->console->newLine();
-        } else {
-            $collections->each($callback);
-        }
+        });
+
+        $this->console->newLine();
     }
 
     /**
@@ -137,11 +135,16 @@ class Factory
             $result = is_string($class) ? $class::create($data->toArray()) : $class->create($data->toArray());
         } else {
             $uniques = [];
-            foreach ($this->uniques as $key) {
-                $uniques[$key] = $data->get($key);
+            foreach ($this->uniques as $key => $originKey) {
+                if (is_int($key) && is_string($originKey)) {
+                    $key = $originKey;
+                    $uniques[$key] = $data->get($originKey);
+                } else if (is_string($key) && is_callable($originKey)) {
+                    $uniques[$key] = $originKey($data);
+                }
             }
 
-            $result = is_string($class) ? $class::withTrashed()->firstOrCreate($uniques, $data->toArray()) : $class->firstOrCreate($uniques, $data->toArray());
+            $result = is_string($class) ? $class::withTrashed()->updateOrCreate($uniques, $data->toArray()) : $class->updateOrCreate($uniques, $data->toArray());
         }
 
         if ($this->callback) {

@@ -120,9 +120,7 @@ class Product extends Model
     public function images() : HasMany
     {
         return $this->hasMany(File::class, 'parent_id')
-            ->where([
-                'parent_model' => 'SIOPEN\Migrator\Models\Product',
-            ])
+            ->where('parent_model', 'LIKE', '%Product%',)
             ->limit(4)
             ->latest('id')
             ->whereNull('deleted_at');
