@@ -121,7 +121,7 @@ class Product extends Model
     {
         return $this->hasMany(File::class, 'parent_id')
             ->where([
-                'parent_model' => Product::class,
+                'parent_model' => 'SIOPEN\Migrator\Models\Product',
             ])
             ->limit(4)
             ->latest('id')
