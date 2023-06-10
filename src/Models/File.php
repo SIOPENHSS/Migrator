@@ -61,16 +61,11 @@ class File extends Model
      */
     public function parent() : BelongsTo
     {
-        $selected = match ($this->parent_model) {
-            Product::class  => [
-                'id', 'merchant_id', 'title',
-            ],
-            Merchant::class => [
-                'id', 'name',
-            ],
-        };
+        if (str_contains($this->parent_model, 'Product')) {
+            $selected = Product::class;
+        }
 
-        return $this->belongsTo($this->parent_model, 'parent_id')->select($selected);
+        return $this->belongsTo($selected, 'parent_id');
     }
 
     /**

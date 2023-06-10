@@ -18,6 +18,16 @@ class MigratorServiceProvider extends ServiceProvider
             'laratrust.models.role'      => Role::class,
             'laratrust.models.roles'     => Role::class,
             'laratrust.tables.role_user' => 'user_roles',
+
+            'filesystems.disks.product.driver'     => 'local',
+            'filesystems.disks.product.root'       => storage_path('app/public/merchant/[merchant]/product'),
+            'filesystems.disks.product.url'        => config('app.url') . '/storage/merchant/[merchant]/product',
+            'filesystems.disks.product.visibility' => 'public',
+
+            'filesystems.disks.dummy.driver'     => 'local',
+            'filesystems.disks.dummy.root'       => storage_path('app/public'),
+            'filesystems.disks.dummy.url'        => config('app.url') . '/market/img/dummy/',
+            'filesystems.disks.dummy.visibility' => 'public',
         ]);
     }
 }

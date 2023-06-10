@@ -59,10 +59,15 @@ class Category extends Model
     /**
      * @return HasOne
      */
-//    public function tax() : HasOne
-//    {
-//        return $this->hasOne(TaxCategory::class, 'category_id')->where('status', true);
-//    }
+    public function tax() : HasOne
+    {
+        return $this->hasOne(TaxCategory::class, 'category_id')->where('status', true);
+    }
+
+    public function taxes() : HasMany
+    {
+        return $this->hasMany(TaxCategory::class, 'category_id');
+    }
 
     /**
      * @return HasMany
