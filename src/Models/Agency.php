@@ -28,7 +28,7 @@ class Agency extends Model
     /**
      * @var string
      */
-    protected $connection = 'siopen';
+    protected $connection = 'old_siopen';
 
     /**
      * @var string[]
