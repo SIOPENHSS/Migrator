@@ -144,10 +144,6 @@ class Factory
                 }
             }
 
-            if (in_array(SoftDeletes::class, class_uses_recursive($this->origin))) {
-                $query = $query->withTrashed();
-            }
-
             if (is_string($class)) {
                 if (in_array(SoftDeletes::class, class_uses_recursive($class))) {
                     $result = $class::withTrashed()->updateOrCreate($uniques, $data->toArray());
