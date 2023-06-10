@@ -144,7 +144,19 @@ class Factory
                 }
             }
 
-            $result = is_string($class) ? $class::withTrashed()->updateOrCreate($uniques, $data->toArray()) : $class->updateOrCreate($uniques, $data->toArray());
+            if (in_array(SoftDeletes::class, class_uses_recursive($this->origin))) {
+                $query = $query->withTrashed();
+            }
+
+            if (is_string($class)) {
+                if (in_array(SoftDeletes::class, class_uses_recursive($this->origin))) {
+                    $result = $class::withTrashed()->updateOrCreate($uniques, $data->toArray());
+                } else {
+                    $result = $class::updateOrCreate($uniques, $data->toArray());
+                }
+            } else {
+                $result = $class->updateOrCreate($uniques, $data->toArray());
+            }
         }
 
         if ($this->callback) {
