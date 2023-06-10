@@ -57,7 +57,7 @@ class Order extends Model
     /**
      * @var string
      */
-    protected $connection = 'old_siopen';
+    protected $connection = 'siopen';
 
     /**
      * @var string[]
@@ -171,5 +171,3 @@ class Order extends Model
     public function chats() : HasMany
     {
         return $this->hasMany(OrderChatBargain::class, 'order_id');
-    }
-}

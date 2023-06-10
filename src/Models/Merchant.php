@@ -16,7 +16,7 @@ class Merchant extends Model
 {
     use SoftDeletes, FileRelation;
 
-    protected $connection = 'old_siopen';
+    protected $connection = 'siopen';
 
     /**
      * @var string

@@ -11,7 +11,7 @@ class OrderItem extends Model
     /**
      * @var string
      */
-    protected $connection = 'old_siopen';
+    protected $connection = 'siopen';
 
     /**
      * @var string[]

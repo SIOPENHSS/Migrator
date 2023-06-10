@@ -2,10 +2,10 @@
 
 namespace SIOPEN\Migrator\Models;
 
-use SIOPEN\Migrator\Models\Traits\DateTimeForIndonesian;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use JetBrains\PhpStorm\Pure;
+use SIOPEN\Migrator\Models\Traits\DateTimeForIndonesian;
 
 /**
  * @method static ProductPrice create(array $array)
@@ -13,10 +13,12 @@ use JetBrains\PhpStorm\Pure;
  * @mixin IdeHelperProductPrice
  */
 class ProductPrice extends Model
-{/**
+{
+    /**
      * @var string
      */
-    protected $connection = 'old_siopen';
+    protected $connection = 'siopen';
+
     /**
      * @var string[]
      */

@@ -34,7 +34,7 @@ class Factory
      * @param  array  $fields
      * @param  string $connection
      */
-    public function __construct(protected array $fields, protected string $connection = 'old_siopen')
+    public function __construct(protected array $fields, protected string $connection = 'siopen')
     {
         $this->fields = array_merge(
             [
