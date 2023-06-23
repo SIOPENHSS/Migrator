@@ -42,4 +42,9 @@ class AnnualNotificationLetter extends Model
             AnnualNotificationLetter::UNREPORTED => 'BELUM MELAPORKAN',
         };
     }
+
+     public function items()
+    {
+        return $this->hasMany(AnnualNotificationLetterList::class, 'notification_id');
+    }
 }
