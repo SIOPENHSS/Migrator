@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnnualNotificationLetterList extends Model
-{
+{ /**
+     * @var string
+     */
+    protected $connection = 'siopen';
     /**
      * @var string[]
      */

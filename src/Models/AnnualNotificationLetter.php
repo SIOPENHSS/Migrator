@@ -1,11 +1,9 @@
 <?php
 
 namespace SIOPEN\Migrator\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @mixin IdeHelperAnnualNotificationLetter
- */
 class AnnualNotificationLetter extends Model
 {
     public const REJECTED = 'REJECTED';
@@ -15,6 +13,11 @@ class AnnualNotificationLetter extends Model
     public const ACCEPTED = 'ACCEPTED';
 
     public const UNVERIFIED = 'UNVERIFIED';
+
+    /**
+     * @var string
+     */
+    protected $connection = 'siopen';
 
     public static function getAllStatus() : array
     {
@@ -33,10 +36,10 @@ class AnnualNotificationLetter extends Model
     public static function getLocalStatus($status) : string
     {
         return match ($status) {
-            AnnualNotificationLetter::REJECTED => 'DITOLAK',
-            AnnualNotificationLetter::ACCEPTED => 'DITERIMA',
+            AnnualNotificationLetter::REJECTED   => 'DITOLAK',
+            AnnualNotificationLetter::ACCEPTED   => 'DITERIMA',
             AnnualNotificationLetter::UNVERIFIED => 'SUDAH MELAPORKAN',
-            AnnualNotificationLetter::UNREPORTED => 'BELUM MELAPORKAN'
+            AnnualNotificationLetter::UNREPORTED => 'BELUM MELAPORKAN',
         };
     }
 }
